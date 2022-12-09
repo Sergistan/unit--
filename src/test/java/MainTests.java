@@ -47,7 +47,6 @@ public class MainTests {
 
     @Test
     public void testPersonCountUnderAge18() {
-
         long expected = 2L;
 
         long countUnderAge = personList.stream().filter(person -> person.getAge() > 18).count();
@@ -59,10 +58,10 @@ public class MainTests {
 
     @Test
     public void testListOfNamesOfRecruit() {
+        List<String> expected = List.of("Utochkin");
+
         List<String> fio = personList.stream().filter(person -> person.getAge() >= 18 && person.getAge() <= 27).
                 map(Person::getFamily).collect(Collectors.toList());
-
-        List<String> expected = List.of("Utochkin");
 
         Assertions.assertLinesMatch(expected, fio);
         assertThat(fio, equalTo(expected));
