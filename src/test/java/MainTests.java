@@ -52,6 +52,14 @@ public class MainTests {
         long countUnderAge = personList.stream().filter(person -> person.getAge() > 18).count();
 
         Assertions.assertTrue(countUnderAge == expected);
+    }
+
+    @Test
+    public void testPersonCountUnderAge18Hamcrest() {
+        long expected = 2L;
+
+        long countUnderAge = personList.stream().filter(person -> person.getAge() > 18).count();
+
         assertThat(countUnderAge, allOf(greaterThan(1L), lessThan(3L), not(equalTo(0L)), equalTo(expected)));
 
     }
@@ -64,6 +72,15 @@ public class MainTests {
                 map(Person::getFamily).collect(Collectors.toList());
 
         Assertions.assertLinesMatch(expected, fio);
+    }
+
+    @Test
+    public void testListOfNamesOfRecruitHamcrest() {
+        List<String> expected = List.of("Utochkin");
+
+        List<String> fio = personList.stream().filter(person -> person.getAge() >= 18 && person.getAge() <= 27).
+                map(Person::getFamily).collect(Collectors.toList());
+
         assertThat(fio, equalTo(expected));
     }
 
@@ -78,15 +95,53 @@ public class MainTests {
                 .sorted(Comparator.comparing(Person::getFamily))
                 .collect(Collectors.toList());
 
-        Assertions.assertNotNull(sortedList);
         Assertions.assertEquals(expected, sortedList);
+    }
 
-        assertThat(sortedList, notNullValue());
+    @Test
+    public void testOfSortedListHamcrest() {
+        List<Person> expected = List.of(person1);
+
+        List<Person> sortedList = personList.stream()
+                .filter(person -> person.getEducation().equals(Education.HIGHER))
+                .filter(person -> (person.getSex().equals(Sex.MAN) && person.getAge() >= 18 && person.getAge() <= 65)
+                        || (person.getSex().equals(Sex.WOMAN) && person.getAge() >= 18 && person.getAge() <= 60))
+                .sorted(Comparator.comparing(Person::getFamily))
+                .collect(Collectors.toList());
+
         assertThat(sortedList, contains(person1));
     }
 
     @Test
-    public void sizeListHave1() {
+    public void testOfSortedListNotNull() {
+        List<Person> expected = List.of(person1);
+
+        List<Person> sortedList = personList.stream()
+                .filter(person -> person.getEducation().equals(Education.HIGHER))
+                .filter(person -> (person.getSex().equals(Sex.MAN) && person.getAge() >= 18 && person.getAge() <= 65)
+                        || (person.getSex().equals(Sex.WOMAN) && person.getAge() >= 18 && person.getAge() <= 60))
+                .sorted(Comparator.comparing(Person::getFamily))
+                .collect(Collectors.toList());
+
+        Assertions.assertNotNull(sortedList);
+    }
+
+    @Test
+    public void testOfSortedListNotNullHamcrest() {
+        List<Person> expected = List.of(person1);
+
+        List<Person> sortedList = personList.stream()
+                .filter(person -> person.getEducation().equals(Education.HIGHER))
+                .filter(person -> (person.getSex().equals(Sex.MAN) && person.getAge() >= 18 && person.getAge() <= 65)
+                        || (person.getSex().equals(Sex.WOMAN) && person.getAge() >= 18 && person.getAge() <= 60))
+                .sorted(Comparator.comparing(Person::getFamily))
+                .collect(Collectors.toList());
+
+        assertThat(sortedList, notNullValue());
+    }
+
+    @Test
+    public void listHaveSizeOf1() {
         int expected = 1;
 
         List<Person> sortedList = personList.stream()
@@ -100,11 +155,28 @@ public class MainTests {
     }
 
     @Test
-    public void checkPropertyPerson1() {
+    public void checkPropertyPerson1HaveName() {
         assertThat(person1, Matchers.<Person>hasProperty("name"));
+    }
+
+    @Test
+    public void checkPropertyPerson1HaveFamily() {
         assertThat(person1, Matchers.<Person>hasProperty("family"));
+    }
+
+    @Test
+    public void checkPropertyPerson1HaveAge() {
         assertThat(person1, Matchers.<Person>hasProperty("age"));
+    }
+
+    @Test
+    public void checkPropertyPerson1HaveSex() {
         assertThat(person1, Matchers.<Person>hasProperty("sex"));
+    }
+
+    @Test
+    public void checkPropertyPerson1HaveEducation() {
         assertThat(person1, Matchers.<Person>hasProperty("education"));
     }
+
 }
